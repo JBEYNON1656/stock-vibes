@@ -3,7 +3,7 @@ services:
     name: stockvibes
     env: python
     buildCommand: ""
-    startCommand: gunicorn run:app
+    startCommand: gunicorn "app:create_app()"
     envVars:
       - key: FINNHUB_API_KEY
         value: your_api_key_here  # You can also set this via the Render dashboard

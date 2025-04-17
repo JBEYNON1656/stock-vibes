@@ -14,7 +14,9 @@ def get_stock_data(symbol):
     response = requests.get(url)
 
     if response.status_code == 200:
+        print(response.json())
         return response.json()
+        
     else:
         print("Error:", response.status_code)
         return None
@@ -30,12 +32,25 @@ def save_stock_to_csv(symbol, data):
         if f.tell() == 0: #returns current file pointer. If 0, there are no rows
             writer.writerow(["timestamp", "symbol", "current_price", "high", "low", "open", "previous_close"])
 
-            writer.writerow([
-                datetime.now().isoformat,
-                symbol.upper(),
-                data.get("c"),
-                data.get("h"),
-                data.get("l"),
-                data.get("o"),
-                data.get("pc")
-            ])
+        writer.writerow([
+            datetime.now().isoformat(),
+            symbol.upper(),
+            data.get("c"),
+            data.get("h"),
+            data.get("l"),
+            data.get("o"),
+            data.get("pc")
+        ])
+
+def get_and_save_stock(symbol):
+    #get stock data
+    data = get_stock_data(symbol)
+
+    #if data exists, save to csv
+    if data and data.get("t", 0) != 0:
+        save_stock_to_csv(symbol, data)
+        print(f"Data for {symbol} saved successfully!")
+        return(data)
+    else:
+        print(f"Invalid stock symbol for {symbol}, or some other error. Nothing saved.")
+        return(data)

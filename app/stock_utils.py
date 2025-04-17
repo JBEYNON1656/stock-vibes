@@ -42,15 +42,8 @@ def save_stock_to_csv(symbol, data):
             data.get("pc")
         ])
 
-def get_and_save_stock(symbol):
+def return_stock_data(symbol):
     #get stock data
     data = get_stock_data(symbol)
 
-    #if data exists, save to csv
-    if data and data.get("t", 0) != 0:
-        save_stock_to_csv(symbol, data)
-        print(f"Data for {symbol} saved successfully!")
-        return(data)
-    else:
-        print(f"Invalid stock symbol for {symbol}, or some other error. Nothing saved.")
-        return(data)
+    return(data)

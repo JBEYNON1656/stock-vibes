@@ -1,4 +1,7 @@
 from app import create_app
+from dotenv import load_dotenv
+
+load_dotenv() #loads utility to be able to access secrets in the .env file
 
 app = create_app() #returns a Flask app instance after it has been set up
 

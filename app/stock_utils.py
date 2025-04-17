@@ -1,10 +1,25 @@
 import csv
+import requests
 import os
 from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv() #loads utility to read the .env file for secrets
+
 
 #defines a function that takes a stock symbol and data (as a dictionary) to write to a CSV
+def get_stock_data(symbol):
+    api_key = os.getenv("FINNHUB_API_KEY")
+    url = f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={api_key}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        return response.json()
+    else:
+        print("Error:", response.status_code)
+        return None
+    
 def save_stock_to_csv(symbol, data):
-    file_exists = os.path.isfile("stock_data.csv")
 
     #opens or creates a new file in append mode (a), meaning new data will be added to the end of the file. Newline ensures new lines are written correctly without blanks
     with open("stock_data.csv", "a", newline="") as f:

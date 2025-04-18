@@ -5,16 +5,15 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv() #loads utility to read the .env file for secrets
-
+api_key = os.getenv("FINNHUB_API_KEY")
 
 #defines a function that takes a stock symbol and data (as a dictionary) to write to a CSV
 def get_stock_data(symbol):
-    api_key = os.getenv("FINNHUB_API_KEY")
     url = f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={api_key}"
     response = requests.get(url)
+    
 
     if response.status_code == 200:
-        print(response.json())
         return response.json()
         
     else:
@@ -45,5 +44,10 @@ def save_stock_to_csv(symbol, data):
 def return_stock_data(symbol):
     #get stock data
     data = get_stock_data(symbol)
-
     return(data)
+
+#def get_stock_name(symbol):
+#    url = f"https://finnhub.io/api/v1/search?q={symbol}&token={api_key}"
+#    response = requests.get(url)   
+#    print(response.json()) 
+

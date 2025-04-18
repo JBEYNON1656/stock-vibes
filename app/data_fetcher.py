@@ -21,7 +21,7 @@ def fetch_and_save_news():
         time.sleep(1)
         #gets the stock data from Gnews
         data = get_news_data(symbol)
-        #ensures that the data is not empty. Gnews returns 200, but blank data for invalid stock symbols, so need to check for blankness too 
+        #ensures that the data is not empty.
         if data:
             save_news_to_csv(symbol, data)
             print(f"Data from {symbol} written to csv.")

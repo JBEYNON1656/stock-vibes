@@ -6,16 +6,17 @@ from dotenv import load_dotenv
 
 load_dotenv() #loads utility to read the .env file for secrets
 
-api_key = os.getenv("GNEWS_API_KEY")
+api_key = os.getenv("GNEWS_API_KEY") #gets API key from env file
 
+#get data for 10 news article for given symbol
 def get_news_data(symbol):
-    search_value = symbol
-    url = f"https://gnews.io/api/v4/search?q={search_value}&lang=en&country=us&max=10&apikey={api_key}"
+    url = f"https://gnews.io/api/v4/search?q={symbol}&lang=en&country=us&max=10&apikey={api_key}"
+    #send the API request
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
-        #returns a list of articles
+        #returns the articles as a list
         return data.get("articles", [])
         
     else:
@@ -33,6 +34,7 @@ def save_news_to_csv(symbol, articles):
         if f.tell() == 0: #returns current file pointer. If 0, there are no rows
             writer.writerow(["timestamp", "symbol", "title", "description", "content", "publishedAt"])
 
+        #writes row to csv
         for article in articles:
             writer.writerow([
                 datetime.now().isoformat(),

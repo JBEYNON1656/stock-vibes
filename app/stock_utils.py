@@ -12,10 +12,8 @@ def get_stock_data(symbol):
     url = f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={api_key}"
     response = requests.get(url)
     
-
     if response.status_code == 200:
-        return response.json()
-        
+        return response.json() 
     else:
         print("Error:", response.status_code)
         return None
@@ -31,6 +29,7 @@ def save_stock_to_csv(symbol, data):
         if f.tell() == 0: #returns current file pointer. If 0, there are no rows
             writer.writerow(["timestamp", "symbol", "current_price", "high", "low", "open", "previous_close"])
 
+        #writes row to csv
         writer.writerow([
             datetime.now().isoformat(),
             symbol.upper(),
@@ -41,13 +40,8 @@ def save_stock_to_csv(symbol, data):
             data.get("pc")
         ])
 
+#GET RID OF THIS! this functio is needed only bc other function is used for displaying this data as a route. 
 def return_stock_data(symbol):
     #get stock data
     data = get_stock_data(symbol)
     return(data)
-
-#def get_stock_name(symbol):
-#    url = f"https://finnhub.io/api/v1/search?q={symbol}&token={api_key}"
-#    response = requests.get(url)   
-#    print(response.json()) 
-

@@ -40,8 +40,21 @@ def save_stock_to_csv(symbol, data):
             data.get("pc")
         ])
 
-#GET RID OF THIS! this functio is needed only bc other function is used for displaying this data as a route. 
-def return_stock_data(symbol):
-    #get stock data
-    data = get_stock_data(symbol)
-    return(data)
+def get_long_name(symbol):
+    url = f"https://finnhub.io/api/v1/search?q={symbol}&token={api_key}"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        for item in data.get('result',[]):
+            if item['symbol'] == symbol:
+                print(item['description'])
+                return item['description']
+        print(f"No exact match for {symbol} found")
+        return None
+    else:
+        print(f"Error fetching long name for symbol {symbol}")
+        return None
+    
+
+get_long_name("DIS")

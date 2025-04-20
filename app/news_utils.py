@@ -32,17 +32,33 @@ def save_news_to_csv(symbol, articles):
 
         #checks if the file is empty to write the first row
         if f.tell() == 0: #returns current file pointer. If 0, there are no rows
-            writer.writerow(["timestamp", "symbol", "title", "description", "content", "publishedAt"])
+            writer.writerow(["timestamp", "symbol", "title", "description", "content", "publishedAt", "sentiment"])
 
         #writes row to csv
         for article in articles:
+            #analyzes sentiment of article description
+            sentiment = analyze_sentiment(article["description"])
             writer.writerow([
                 datetime.now().isoformat(),
                 symbol.upper(),
                 article.get("title"),
                 article.get("description"),
                 article.get("content"),
-                article.get("publishedAt")
+                article.get("publishedAt"),
+                sentiment
         ])
     
-get_news_data("AAPL")
+#anaylze article description for 
+def analyze_sentiment(text):
+    from textblob import TextBlob
+    blob = TextBlob(text)
+    sentiment_score = blob.sentiment.polarity
+    if sentiment_score > 0:
+        return 'Good'
+    elif sentiment_score < 0:
+        return 'Bad'
+    else:
+        return "Neutral"
+
+
+get_news_data("PG")

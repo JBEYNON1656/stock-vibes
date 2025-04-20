@@ -3,7 +3,6 @@ from news_utils import get_news_data, save_news_to_csv
 from config import stocks
 import time
 
-
 def fetch_and_save_stock():
     for symbol in stocks:
         #gets the stock data from Finnhub
@@ -22,7 +21,7 @@ def fetch_and_save_news():
         #gets the long name for the stock symbol
         long_name = get_long_name(symbol)
         symbol_and_name = symbol + " " + long_name
-        #gets the stock data from Gnews
+        #gets the stock data from Gnews by querying for symbol and long name
         data = get_news_data(symbol_and_name)
         #ensures that the data is not empty.
         if data:

@@ -10,7 +10,8 @@ api_key = os.getenv("GNEWS_API_KEY") #gets API key from env file
 
 #get data for 10 news article for given symbol
 def get_news_data(symbol):
-    url = f"https://gnews.io/api/v4/search?q={symbol}&lang=en&country=us&max=10&apikey={api_key}"
+    query = symbol.replace("& ", "").replace("/", " ")
+    url = f"https://gnews.io/api/v4/search?q={query}&lang=en&country=us&max=10&apikey={api_key}"
     #send the API request
     response = requests.get(url)
 
@@ -26,7 +27,7 @@ def get_news_data(symbol):
 def save_news_to_csv(symbol, articles):
     
     #opens or creates a new file in append mode (a), meaning new data will be added to the end of the file. Newline ensures new lines are written correctly without blanks
-    with open("news_data.csv", "a", newline="") as f:
+    with open("data_news.csv", "a", newline="") as f:
         #creates a writer linked to f, which handles writing rows to csv files out of the box
         writer = csv.writer(f)
 
@@ -59,6 +60,3 @@ def analyze_sentiment(text):
         return 'Bad'
     else:
         return "Neutral"
-
-
-get_news_data("PG")

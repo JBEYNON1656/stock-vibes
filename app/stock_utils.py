@@ -21,7 +21,7 @@ def get_stock_data(symbol):
 def save_stock_to_csv(symbol, data):
 
     #opens or creates a new file in append mode (a), meaning new data will be added to the end of the file. Newline ensures new lines are written correctly without blanks
-    with open("stock_data.csv", "a", newline="") as f:
+    with open("data_stock.csv", "a", newline="") as f:
         #creates a writer linked to f, which handles writing rows to csv files out of the box
         writer = csv.writer(f)
 
@@ -40,21 +40,20 @@ def save_stock_to_csv(symbol, data):
             data.get("pc")
         ])
 
+#gets long name for corresponding stock symbol
 def get_long_name(symbol):
     url = f"https://finnhub.io/api/v1/search?q={symbol}&token={api_key}"
     response = requests.get(url)
 
     if response.status_code == 200:
         data = response.json()
+        #loops through potential symbol matches and checks for EXACT match
         for item in data.get('result',[]):
             if item['symbol'] == symbol:
-                print(item['description'])
                 return item['description']
+        #if no exact match found
         print(f"No exact match for {symbol} found")
         return None
     else:
         print(f"Error fetching long name for symbol {symbol}")
         return None
-    
-
-get_long_name("DIS")

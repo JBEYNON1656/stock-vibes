@@ -11,7 +11,6 @@ def home():
 @bp.route('/stock/<symbol>')
 def fetch_and_save_stock(symbol):
     data = return_stock_data(symbol)
-    print(data)
 
     #ensures that the data is not empty. Finnhub returns 200, but blank data for invalid stock symbols, so need to check for blankness too 
     if data and data.get("t", 0) != 0:

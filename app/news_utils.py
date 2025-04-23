@@ -3,6 +3,8 @@ import requests
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+from app import db
+from app.models import StockNews
 
 load_dotenv() #loads utility to read the .env file for secrets
 
@@ -24,6 +26,20 @@ def get_news_data(symbol):
         print("Error:", response.status_code)
         return None
     
+def save_news_to_db(symbol, articles):
+    for article in articles:
+        sentiment = analyze_sentiment(article["description"])
+        article_entry = StockNews(
+            symbol=symbol,
+            title=article.get("title"),
+            published_at=article.get("publishedAt"),
+            sentiment=sentiment,
+            timestamp=datetime.now().isoformat()
+        )
+        db.session.add(article_entry)
+
+    db.session.commit()
+
 def save_news_to_csv(symbol, articles):
     
     #opens or creates a new file in append mode (a), meaning new data will be added to the end of the file. Newline ensures new lines are written correctly without blanks
